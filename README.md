@@ -1,5 +1,8 @@
 # Quantum Geometry Learning Systems (QGLS)
 
+![image](https://github.com/user-attachments/assets/2c6125d3-aea6-4795-b7cf-b39821206895)
+
+
 **Quantum Geometry Learning Systems (QGLS)** is a novel AI architecture that brings the principles of quantum mechanics into classical deep learning models through topological and entanglement-inspired design. Developed by **Moonshot Labs**, QGLS is fully open-source and released under the **MIT License**.
 
 ---
