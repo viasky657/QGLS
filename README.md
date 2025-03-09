@@ -36,6 +36,8 @@ QGLS is a research project by **Moonshot Labs**, founded on the principle that A
 
 ---
 
+Research Paper: https://docs.google.com/document/d/1mZzgz7C_R4kewDWzKwi-aLm9-3jrW4ZVs1sSB0e76jg/edit?usp=sharing 
+
 ## ⭐ Support the Project
 If this research inspires you, consider starring the repo or contributing ideas. Let's reshape AI together.
 
