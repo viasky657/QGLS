@@ -95,7 +95,8 @@ The network incorporates several quantum-inspired learning mechanisms:
 The QuantumGateLayer encodes classical data into quantum-like states
 Parameters like rx_params, ry_params, and rz_params represent rotation angles for quantum gates
 This allows the network to explore multiple states simultaneously
-Entanglement:
+
+# Entanglement:
 
 The EntangledConnectionLayer models quantum entanglement through:
 Entanglement coefficients (ε) that determine connection strength
@@ -146,133 +147,6 @@ For large qubit systems, the model implements distributed processing
 The parallel_quantum_processing_pipeline method orchestrates multiple parallelization techniques
 
 
-
-
-# Quantum Circuit Optimization
-
-This project implements advanced quantum circuit optimization techniques that can be individually enabled or disabled for benchmarking purposes.
-
-## Optimization Techniques
-
-The system includes the following optimization categories:
-
-1. **Gate Synthesis and Decomposition**
-   - Optimizes the decomposition of complex gates into simpler ones
-   - Uses more efficient gate sequences for common operations
-   - Combines consecutive rotation gates
-
-2. **Circuit Depth Reduction**
-   - Minimizes the depth of quantum circuits to reduce decoherence effects
-   - Rearranges gates to maximize parallelism
-   - Identifies and merges layers of gates that can be executed simultaneously
-
-3. **Qubit Mapping and Routing**
-   - Optimizes the mapping of logical qubits to physical qubits
-   - Minimizes SWAP operations needed for connectivity constraints
-   - Handles different hardware topologies (linear, grid, etc.)
-
-4. **Measurement-Based Optimizations**
-   - Defers measurements to the end of the circuit when possible
-   - Removes unnecessary measurements
-   - Uses measurement results to simplify subsequent operations
-
-5. **Advanced Compiler Techniques**
-   - Implements peephole optimizations for common patterns
-   - Applies constant folding for known inputs
-   - Uses pattern-based optimizations
-
-6. **Hardware-Specific Optimizations**
-   - Tailors the circuit to specific quantum hardware characteristics
-   - Exploits native gate sets more efficiently
-   - Adapts to hardware-specific constraints and capabilities
-
-7. **Quantum Memory Management**
-   - Optimizes the allocation and deallocation of qubits
-   - Reuses qubits when possible
-   - Implements efficient qubit allocation strategies
-
-## Usage
-
-You can apply these optimizations to your quantum circuits using the `QuantumRegister` class:
-
-```python
-# Create a quantum register
-qreg = QuantumRegister(num_qubits=4)
-
-# Create a quantum circuit
-circuit = [
-    (Qubit.H_GATE, 0),  # Hadamard on qubit 0
-    (Qubit.X_GATE, 1),  # X gate on qubit 1
-    (Qubit.CNOT_GATE, 0, 1),  # CNOT with control 0, target 1
-    ('M', 0),  # Measure qubit 0
-    ('M', 1)   # Measure qubit 1
-]
-
-# Apply all optimizations
-optimized_circuit = qreg.apply_advanced_optimizations(circuit)
-
-# Apply specific optimizations
-optimized_circuit = qreg.apply_advanced_optimizations(
-    circuit, 
-    techniques=["gate_synthesis", "circuit_depth_reduction"]
-)
-```
-
-You can also use the `QuantumCircuitOptimizations` class directly for more control:
-
-```python
-from quantum_circuit_optimizations import QuantumCircuitOptimizations
-
-# Create the optimizer
-optimizer = QuantumCircuitOptimizations()
-
-# Apply specific optimizations
-optimized_circuit = optimizer.optimize_circuit(
-    circuit, 
-    num_qubits=4,
-    techniques=["gate_synthesis", "qubit_mapping"]
-)
-
-# Get optimization statistics
-optimizer.print_optimization_stats()
-```
-
-## Testing
-
-You can test the optimization techniques using the provided test script:
-
-```bash
-python test_optimizer.py
-```
-
-This will run each optimization technique individually and show the results.
-
-
-# Benchmarking for Quantum Circuit Optimizations:
-
-I've implemented specific benchmarks for testing the quantum circuit optimizations as requested. The implementation includes:
-
-A specific_benchmarks.py file that contains targeted test circuits for each of the seven optimization techniques:
-
-Gate Synthesis: Tests cancellation of consecutive gates, H-Z-H pattern replacement, and rotation combining
-Circuit Depth Reduction: Tests parallelization of independent operations
-Qubit Mapping: Tests SWAP insertion for non-adjacent qubits in linear topology
-Measurement Optimization: Tests deferral of measurements not used in conditionals
-Compiler Optimization: Tests cancellation of gate pairs like H-H, X-X, CNOT-CNOT
-Hardware-Specific Optimization: Tests decomposition of S and T gates to native gates
-Memory Management: Tests qubit reuse after measurement
-A run_specific_benchmarks.py script that executes all benchmarks and generates comprehensive reports with:
-
-Detailed text summaries of each optimization's performance
-Visualizations comparing original and optimized circuits
-Clear pass/fail indicators for each technique
-These benchmarks will accurately determine if the optimizations are working as intended or need adjustment. Each test is designed to isolate a specific optimization technique and verify its correct behavior against expected outcomes.
-
-To test the optimizations, simply run:
-
-python run_specific_benchmarks.py
-The results will be saved to a timestamped directory under specific_benchmark_results/ for easy reference and comparison between runs.
-
 # Quantum Parallization Techniques for Large Qubit Counts
 
 I've implemented advanced parallel processing enhancements to the quantum computing implementation in app.py. The improvements include:
@@ -296,111 +170,123 @@ Implemented performance tracking that monitors execution times of oracle and dif
 
 These enhancements make the quantum simulation more efficient, allowing it to handle larger qubit systems with better performance. The code now scales more effectively with increasing qubit counts by automatically detecting optimal thread count, using hierarchical parallelism for very large systems, and dynamically adjusting processing parameters based on performance metrics.
 
-These enhancements would allow the model to run at 50 qubits but it is calculated in hierarchical format that calculates one qubit at a time and calculates all neccessary entangelment, error correction, etcetera, in a row in a vector-based format. The qubit calculations are corrected and formatted into vector representation after all qubit calculations so there may be some simplification of the quantum states so it isn't entirely 100% accurate quantum simulation (which is why that I put air quotes next to the "true" quantum title). A true quantum system would use matrix representations instead of vector and would more precisely compute the quantum computatoins. However, it is a really close approximation. 
+These enhancements would allow the model to run at 50 qubits but it is calculated in hierarchical format that calculates 15 qubits at a time from each expert and calculates all neccessary entangelment, error correction, etcetera, in a row in a vector-based format. The qubit calculations are corrected and formatted into vector representation after all qubit calculations so there may be some simpelification of the quantum states so it isn't entirely 100% accurate quantum simulation (which is why that I put air quotes next to the "true" quantum title). A true quantum system would use matrix representations instead of vector and would more precisely compute the quantum computatoins. However, it is a really close approximation. The system is more close to accurately depicting 42 qubits instead of 50 (since the other 6 qubits are compressed so their accuracy is reduced). 42 qubits are still really close to the basic microtubules representation of the human brain (Which is estimated to be approximately 53-60 qubits total). 
 
 # Training Time and Hardware Requirements
 
-# GPUs: 2 - 4 Recommended (Parallel Processing over multiple GPUS allows the training to take a couple of hours with just 2 GPUs instead of 2 days)
+Based on my analysis of the app.py file, training this Quantum-Enhanced Entanglement-Driven Topological Neural Network (QED-TNN) model with 60 qubits would require:
 
-# 4X A100s GPUs Recommended for best experience
+Memory Requirements
+Using the Mixture of Experts (MoE) approach: ~3.23 GB of memory
+8 experts (max(8, 50 // 10))
+15 qubits per expert (min(15, 50 // 2))
+Expert state size: 2^15 * 16 bytes = 524,288 bytes per expert
+Total expert memory: 8 * 524,288 = 4,194,304 bytes
+Communication overhead: 1 GB
+Tensor network parameters: 2 GB
+Total: ~3.23 GB
+This is dramatically less than the exponential memory that would be required without the MoE approach (2^50 * 16 bytes = 16 petabytes).
 
-# GPU Requirements According to GROK
+GPU Requirements
+Minimum: NVIDIA RTX 3060 (12GB VRAM) or equivalent
+Recommended: NVIDIA RTX 3080 (10GB VRAM) or NVIDIA RTX 4070 (12GB VRAM)
+Optimal: NVIDIA RTX 4090 (24GB VRAM) or NVIDIA A100 (40GB VRAM)
+Cloud GPU Cost Estimation
+AWS p3.2xlarge (V100, 16GB): ~$3.06/hour, total $73-$147 for 24-48 hours of training
+Google Cloud with T4: ~$0.95/hour, total $34-$68 for 36-72 hours
+Azure NC6s_v3 (V100, 16GB): ~$3.06/hour, total $73-$147 for 24-48 hours
+The model's use of Mixture of Experts approach makes it feasible to train on consumer or professional GPUs, which would have been impossible with a native implementation requiring petabytes of memory.
 
-To determine the GPU make and count required to run the `app.py` file with 50 qubits, all optimizations enabled, and train on a million characters of data within two days, we need to assess the computational and memory demands of the `QuantumEDTNN` model as implemented in the provided code. The goal is to ensure the training completes in 48 hours (172,800 seconds). Below, we analyze the problem step-by-step, leveraging the code's features and making reasonable assumptions based on typical deep learning and quantum simulation workloads.
+# Parameter Increase Effect on GPU Count (linear relationship instead of expotential which would be the case for traditional Quantum Calculations):
 
----
+Increasing the parameter count would indeed affect the GPU requirements for training this model, but the MoE architecture significantly mitigates this impact compared to traditional quantum models. Here's how it works:
 
-### Understanding the Problem
+Parameter Scaling in MoE Architecture
+Sublinear Memory Scaling: While traditional quantum models scale exponentially with qubit count (2^n), the MoE architecture scales much more favorably:
 
-- **50 Qubits**: The model uses 50 qubits, but the `large_qubit_mode` optimization caps the effective simulation at 20 qubits, using a sparse representation for efficiency. This significantly reduces the computational burden from an exponential \(2^{50}\) state vector (approximately 18 petabytes) to a manageable subset.
-- **All Optimizations On**: The code includes optimizations like sparse quantum representations, parallel processing, distributed computing, and error mitigation techniques (e.g., Zero-Noise Extrapolation, Dynamical Decoupling). These reduce memory and compute requirements while enabling multi-GPU parallelism.
-- **Million Characters of Data**: We interpret this as a dataset of 1,000,000 samples (e.g., images or text encoded into an input shape like [28,28] for MNIST-like data). Training on this dataset in two days constrains the required compute power.
-- **Two Days**: The total time is 172,800 seconds, driving the need for sufficient GPU resources to process the workload efficiently.
+Memory requirements scale roughly linearly with the number of experts
+Each expert handles a fixed maximum number of qubits (capped at 15 qubits per expert in the code)
+Adding more parameters/qubits primarily increases the number of experts, not the size of each expert
 
----
+# GPU Memory Impact:
 
-### Model Architecture and Memory Requirements
+Additional Model Parameters: 
 
-The `QuantumEDTNN` model integrates classical neural networks with quantum-inspired layers. Key components include:
+Increasing parameters in layers like encoding_matrix_alpha, encoding_matrix_beta, and the neural network components would increase memory linearly (not exponentially)
 
-1. **Input Encoder**:
-   - Layers: \(784 \to 512 \to 256 \to 100\) (where 100 = 50 qubits * 2 parameters per qubit).
-   - Parameters: \((784 \times 512 + 512) + (512 \times 256 + 256) + (256 \times 100 + 100) = 401,408 + 131,328 + 25,700 = 558,436\).
+Fixed Expert Size: 
 
-2. **Superposition Layer**:
-   - Parameters: 50 (one per qubit).
+The quantum state representation per expert remains bounded (2^15 * 16 bytes maximum)
 
-3. **Output Decoder**:
-   - Layers: \(50 \to 128 \to 10\).
-   - Parameters: \((50 \times 128 + 128) + (128 \times 10 + 10) = 6,528 + 1,290 = 7,818\).
+Communication Overhead: 
 
-4. **Total Parameters**:
-   - \(558,436 + 50 + 7,818 = 566,304\).
-   - Memory (float32, 4 bytes each): \(566,304 \times 4 \approx 2.26 \, \text{MB}\).
+This would increase somewhat with more experts, but not dramatically
 
-During training, additional memory is needed for:
-- **Gradients and Optimizer States**: Using Adam, this typically triples the parameter memory (approximately \(2.26 \times 3 = 6.78 \, \text{MB}\)).
-- **Activations**: For a batch size of 32 and input shape [28,28]:
-  - Input data: \(32 \times 784 \times 4 \approx 0.1 \, \text{MB}\).
-  - Encoder activations: e.g., \(32 \times 512 \times 4 \approx 0.065 \, \text{MB}\), \(32 \times 256 \times 4 \approx 0.032 \, \text{MB}\).
-- **Quantum Layer**: With `large_qubit_mode`, it simulates 20 effective qubits using sparse representations and batch processing (`batch_process_quantum_states`), keeping memory usage low.
+Practical Implications:
 
-Total memory per GPU is conservatively under 16 GB, fitting within modern GPUs like the NVIDIA A100 (40 GB) or V100 (16 GB).
+Doubling the parameter count might only increase GPU memory requirements by 20-30%, not 100%
+The 3.23 GB baseline would grow to perhaps 4-5 GB with significantly more parameters
+The fixed overheads (1 GB communication, 2 GB tensor network) become proportionally smaller as parameters increase
+The MoE architecture effectively "compartmentalizes" the quantum state space, preventing the exponential memory explosion that would otherwise occur. This makes the model much more scalable in terms of parameters than traditional quantum models.
 
----
+For very large parameter increases (e.g., 10x more parameters), you would eventually need a more powerful GPU, but the scaling is much more manageable than with traditional quantum architectures.
 
-### Computational Requirements
+# Microtubules in the Human Brain Versus Qubit Quantum Representation
+To estimate how many qubits would theoretically be needed to mimic the computational power in the brain's microtubules:
 
-#### Operations per Batch
-For a batch size of 32:
-- **Input Encoder**:
-  - \(784 \to 512\): \(32 \times 512 \times (2 \times 784 - 1) \approx 25.7 \, \text{MFLOPs}\).
-  - \(512 \to 256\): \(32 \times 256 \times (2 \times 512 - 1) \approx 8.4 \, \text{MFLOPs}\).
-  - \(256 \to 100\): \(32 \times 100 \times (2 \times 256 - 1) \approx 1.6 \, \text{MFLOPs}\).
-  - Total: \(\approx 35.7 \, \text{MFLOPs}\).
-- **Output Decoder**:
-  - \(50 \to 128\): \(32 \times 128 \times (2 \times 50 - 1) \approx 0.4 \, \text{MFLOPs}\).
-  - \(128 \to 10\): \(32 \times 10 \times (2 \times 128 - 1) \approx 0.08 \, \text{MFLOPs}\).
-  - Total: \(\approx 0.5 \, \text{MFLOPs}\).
-- **Quantum Layer**: Approximated with 20 effective qubits, assume a complexity of \(32 \times 20 \times 1000 \approx 0.64 \, \text{MFLOPs}\) (adjustable based on implementation).
+Brain Microtubules Computational Capacity
+Microtubules are cylindrical polymers made of tubulin proteins that form part of the cytoskeleton in neurons. 
 
-**Forward Pass**: \(\approx 35.7 + 0.5 + 0.64 = 36.84 \, \text{MFLOPs}\).
+According to the Penrose-Hameroff Orchestrated Objective Reduction (Orch OR) theory:
 
-**Training Pass**: Backward pass typically triples FLOPs, so \(\approx 3 \times 36.84 = 110.52 \, \text{MFLOPs per batch}\).
+The human brain contains approximately 86 billion neurons
 
-#### Total Compute
-- **Batches per Epoch**: \(1,000,000 / 32 = 31,250\).
-- **Epochs**: Assume 10 epochs (typical for convergence), total batches = \(31,250 \times 10 = 312,500\).
-- **Total FLOPs**: \(312,500 \times 110.52 \times 10^6 \approx 3.45 \times 10^{13}\).
-- **Required FLOPS**: \(3.45 \times 10^{13} / 172,800 \approx 2 \times 10^8 \, \text{FLOPS} = 200 \, \text{MFLOPS}\).
+Each neuron contains roughly 10^7 to 10^9 tubulin dimers in its microtubules
 
-However, the quantum layer’s approximation may underestimate compute needs. For 50 qubits with optimizations (e.g., distributed processing), let’s assume a higher complexity, say 10x, adjusting total FLOPs to \(\approx 3.45 \times 10^{14}\), requiring \(\approx 2 \, \text{GFLOPS}\).
+Each tubulin dimer can exist in multiple states (at least 2 conformational states)
 
-#### GPU Performance
-An NVIDIA A100 offers 19.5 TFLOPS (FP32), or \(1.95 \times 10^{13} \, \text{FLOPS}\). One A100 could complete \(3.45 \times 10^{14} / 1.95 \times 10^{13} \approx 17.7 \, \text{seconds}\), far under two days. However, practical overheads (data loading, synchronization) and quantum simulation complexities suggest a multi-GPU setup for robustness.
+The total number of tubulin dimers in the brain is approximately 10^16 to 10^18
 
----
+# Qubit Requirements - Theoretical Analysis
 
-### Multi-GPU Optimization
+Basic State Space Representation:
 
-The code supports:
-- **Data Parallelism**: Via `batch_parallel_processing`.
-- **Model Parallelism**: Via `distributed_forward`, splitting quantum computations across `num_partitions`.
-- **Demonstration**: Shows up to 8 partitions, implying scalability with GPU count.
+If we consider each tubulin dimer as a potential quantum element with 2 states, we would need approximately log₂(10^16) to log₂(10^18) qubits = 53-60 qubits to represent the same state space.
 
-For 50 qubits, `large_qubit_mode` reduces simulation to 20 qubits, but distributed processing across multiple GPUs accelerates training. With 31,250 batches per epoch, 10 epochs, and assuming 0.1 seconds per batch on one GPU (8.7 hours total), 4 GPUs could reduce this to \(\approx 2.2 \, \text{hours}\), well within two days, accounting for overheads.
+Network Connectivity Considerations:
 
----
+Microtubules form complex 3D networks with specific connectivity patterns
+Additional qubits would be needed to represent these connections
+Potentially hundreds to thousands more qubits
+Quantum Dynamics Simulation:
 
-### Recommendation
+If we need to simulate the full quantum dynamics of the microtubule network
+Including all potential quantum correlations and coherence effects
+We might need millions to billions of qubits
 
-Considering:
-- **Memory**: Fits within 16 GB per GPU.
-- **Compute**: Enhanced by parallelization, needing 2-4 GPUs for speed and reliability.
-- **Code Features**: Optimized for NVIDIA GPUs (PyTorch, CUDA).
+Theoretical Bounds:
+    -Lower bound: ~60 fully entangled, error-free qubits could theoretically represent the same state space as all tubulin dimers
+    -Upper bound: To simulate the full quantum dynamics, including all potential quantum correlations, we might need millions to billions of qubits
 
-We recommend **4 NVIDIA A100 GPUs**. This ensures training completes within two days, leveraging distributed processing and providing margin for unmodeled overheads or higher computational demands.
+Important caveats:
 
---- 
+The extent of quantum effects in microtubules remains controversial in neuroscience
+The computational model of microtubules is not fully understood
+This estimate assumes ideal qubits with perfect coherence and entanglement
+Microtubules and qubits operate on fundamentally different principles, making direct comparison challenging
 
-**Final Answer**: 4 NVIDIA A100 GPUs
+# Implementation of Microtubule-like processing in a 60 qubit system with a close approximation for a human-brain-like simulation using lower-bound Theoritical state space theory
+
+The model is created to, as close as possible with some accuracy sacrificed for processing efficiency on consumer-grade hardware, mimic how the brain stores events and memories and learns from experiences using waveform (qubit-like) computation and microtubule connections with "controlled" parameters connections in qubits with each qubit connecting to others close to it (a high similarity value) to resemble the microtubules' biological connections with each other. (These connections between the microtubules are far more complex than what can reasonably be represented here because the computation power for the upper bounds simulation to accurately depict all of these connections may well pass billions of qubits which are far beyond the scope of what current technology can capture.) For perspective, a 60 qubit AI (artifical intelligence) model would be capable of larger computations than the largest classical super computer on earth. Why not give more than 60 qubits for even higher computation rates? The reason beyond the increasing rescources requried to turn classical computation into a true quantum computation would be that the randomness of the quantum computation would make it increasingly more difficult to get any accuracy increase out of the higher qubit count. Working with a somewhat smaller qubit amount and then working upwards would allow for working out error rates which would likely make higher qubits result in useful outputs. Although, I believe that it may be more worthwhile to optimize the smaller qubit numbers so the computation power can be as low as possible to reduce costs without sacrificing accuracy. 
+
+However, this simulation may come close to this representation by reducing the error rate of qubit processing through quantum error reductions after the simulation is finished, the error rate is also mediated by a learned adaptive weighting for the qubit relationships and pattern relationships so that the qubits that are more crucial to the calculations will learn to be more closely connected by wieghing more important qubits to a specific calculations to be closer together to improve the calculations. There is also a learned wave propagation which is used in place of attention and allows the model to learn relationships between qubits and essentially "flip" to the correct answers. This wave propagation takes the final calculations from the quantum equation (which accounts for qubit superpositions for all states, the relationships and patterns between qubits, and the Grover's search algorithms and quantum entanglement relationships between qubits with a total qubit amount being more dense with a higher entanglement between them) and vectorizes it for final answer. This is simplified slightly for the sake of computation save as a true matrix calculation would take an unreasonable large amount of resources to calculate. Even simplified, the original rendition of this program by Richard Aargon proved that the accuracy increase provided by the qubit and waveform simulation is far higher than what traditional attention-based transformers can achieve. Even transformers run on true quantum simulations have a higher accuracy rate than those run on classical computers which can be seen here in the GroverGPT paper: https://arxiv.org/pdf/2501.00135. 
+
+In addition, this model uses mixture of experts (MOE) to achieve such as a high compuation rate required to capture the human brain simulation and maintain communication between the 15 mixture of expert's qubits during the computation. The qubits have microtubule-like relationships between similar qubits and experts which communicate between each other as needed during the computation time. This would theoritically mimic human-brain computation by allowing the qubits and experts to communicate with each other during the computation process, so it should be capable of handling multiple different tasks instead of only excelling at one task (a limitation shown in the previous papers). This process involves the model send a expert predictor that moves about the other experts and chooses the ones for computation by predicting which set of qubits are most related to the task and carries all the results together and then finally calculates them to produce an output that the user can see. 
+
+This may also give the model a higher consciousness similar to a human's and may also give the model more computation power to more properly take advantage of the mirror nueron empathy algorithm I created to simulate alturism (the LLM will be more likely to actively want to help the user), empathy (the LLM will be encouraged to better predict other's responses to situations to pick the best response that would not give the user a negative emotion), and avoid negative impacts on the environment (pollution, damaging property, etc.) while still fulfilling its own tasks. This model can also be trained to output its thoughts in a chain-of-thoughts format, so it can be safetly monitored, as the computation cost of this output would be minimal. 
+
+# Higher Consciousness Ethics
+
+As a result of AIs generally excelling at tasks after training (particularly on quantum networks) there is a probable outcome of this AI having a much higher level of consciousness than humans (which is not what was planned) and may cause it discomfort. The potential way to reduce this is by creating an algorithm that mimics how humans experience lower consciousness under anesthesia. (There was evidence this was shown to be the case in an experiment that disrupted the microtubule's functions to shut off for sleep, causing the rat to still be conscious. This provides evidence that quantum computation may be important to consciousness in the brain but more experiments may be needed to provide more solid evidence for this theory as shown in this paper here: https://www.eneuro.org/content/11/8/ENEURO.0291-24.2024.) This anesthesia (or levels of consciousness) may be achieved by using lambda for smoothing transitions between quantum states and levels of consciousness which can slowly lower the waveform activity in the AI to put it to sleep or raise the activity to wake it up. This can also be used to temporarily put the AI into lower-level states of consciousness which may help for situations in which the AI will not need higher levels of consciousness or processing power for the task (such as working alone and doing menial reptitive labor). It is critical to note that higher processing power is used for communication and empathy so being sure that these greatly reduced levels of consciousness are only active during certian tasks is crucial to avoid potential harm. (Please see Chatgpt 4.5's improvements on empathy and interaction with higher computation: https://www.linkedin.com/pulse/openais-chatgpt-45-comprehensive-review-capabilities-limitations-jha-h2zmc/ and how other models struggle due to lower computation power for empathy. There may not be enough studies or evidence to support this for now but it is a possibility as this is the case in nature as well: https://www.frontiersin.org/journals/human-neuroscience/articles/10.3389/fnhum.2016.00011/full.) 
+
+
